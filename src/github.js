@@ -5,12 +5,25 @@ async function request(path, signal) {
   });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const error = new Error(body.error || `Request failed with HTTP ${response.status}.`);
+    const message = body?.message || body?.error?.message
+      || (typeof body?.error === "string" ? body.error : JSON.stringify(body))
+      || `Request failed with HTTP ${response.status}.`;
+    const error = new Error(message);
     error.status = response.status;
     error.rateLimited = body.rateLimited === true;
     throw error;
   }
   return body;
+}
+
+export function getErrorMessage(err) {
+  const message = err?.message || err?.error?.message;
+  if (message) return String(message);
+  try {
+    return JSON.stringify(err) || String(err) || "An unexpected error occurred.";
+  } catch {
+    return String(err) || "An unexpected error occurred.";
+  }
 }
 
 export function normalizeRepository(input) {

@@ -5,7 +5,7 @@ import {
   Search, ShieldCheck, Star, X,
 } from "lucide-react";
 import { aggregateRepository, formatDuration, getCommitDelta } from "./analytics";
-import { fetchApiStatus, fetchRepository, normalizeRepository, searchRepositories } from "./github";
+import { fetchApiStatus, fetchRepository, getErrorMessage, normalizeRepository, searchRepositories } from "./github";
 
 const Charts = lazy(() => import("./Charts.jsx"));
 const PERIOD_OPTIONS = ["7D", "30D", "90D", "1Y"];
@@ -174,8 +174,9 @@ function App() {
       setTotalCount(result.totalCount || 0);
       setView("explore");
     } catch (error) {
-      if (error.name === "AbortError") return;
-      setSearchError(`${error.message}${error.rateLimited ? " Add GITHUB_TOKEN in .env to increase the API limit." : ""}`);
+      if (error?.name === "AbortError") return;
+      const message = getErrorMessage(error);
+      setSearchError(`${message}${error?.rateLimited ? " Configure GITHUB_TOKEN in the server environment to increase the API limit." : ""}`);
       setResults([]);
     } finally {
       if (!controller.signal.aborted) setSearchLoading(false);
@@ -196,8 +197,9 @@ function App() {
       const data = await fetchRepository(repo.full_name, controller.signal);
       setRepositoryData(data);
     } catch (error) {
-      if (error.name === "AbortError") return;
-      setDashboardError(`${error.message}${error.rateLimited ? " Configure GITHUB_TOKEN in .env to increase the API limit." : ""}`);
+      if (error?.name === "AbortError") return;
+      const message = getErrorMessage(error);
+      setDashboardError(`${message}${error?.rateLimited ? " Configure GITHUB_TOKEN in the server environment to increase the API limit." : ""}`);
     } finally {
       if (!controller.signal.aborted) setBusyRepo("");
     }
@@ -279,7 +281,7 @@ function App() {
                 <span className="mr-1 text-[11px] text-[#8c959f]">Quick search</span>
                 {["react", "next.js language:TypeScript", "developer tools"].map((item) => <button key={item} onClick={() => { setQuery(item); search(item, sort); }} className="rounded-full border border-[#d0d7de] bg-white px-3 py-1.5 font-mono text-[10px] text-[#656d76] transition hover:border-[#0969da] hover:text-[#0969da]">{item}</button>)}
               </div>
-              {!apiStatus?.tokenConfigured && apiStatus && <p className="mt-3 inline-flex items-center gap-1.5 text-[10px] text-[#8c959f]"><ShieldCheck size={12} /> Public GitHub API access. Set <code className="rounded bg-[#eaeef2] px-1 font-mono">GITHUB_TOKEN</code> in server .env for a higher rate limit.</p>}
+              {!apiStatus?.tokenConfigured && apiStatus && <p className="mt-3 inline-flex items-center gap-1.5 text-[10px] text-[#8c959f]"><ShieldCheck size={12} /> Public GitHub API access. Configure <code className="rounded bg-[#eaeef2] px-1 font-mono">GITHUB_TOKEN</code> in the server environment for a higher rate limit.</p>}
               {searchError && <p role="alert" className="mx-auto mt-4 max-w-2xl rounded-md border border-[#ff8182] bg-[#ffebe9] px-3 py-2 text-left text-xs text-[#cf222e]">{searchError}</p>}
             </section>
 
