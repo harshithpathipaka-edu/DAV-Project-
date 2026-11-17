@@ -243,7 +243,7 @@ function App() {
         <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
           <button onClick={() => setView("explore")} className="flex items-center gap-3 text-left">
             <span className="grid h-9 w-9 place-items-center rounded-lg bg-[#1f2328] text-white"><Github size={20} /></span>
-            <span><span className="block text-sm font-semibold tracking-tight">GitHub Signal</span><span className="block text-[10px] text-[#656d76]">Repository intelligence</span></span>
+            <span><span className="block text-sm font-semibold tracking-tight">Dashboard</span><span className="block text-[10px] text-[#656d76]">GitHub Repositories</span></span>
           </button>
           <nav className="flex items-center gap-1 rounded-lg border border-[#d0d7de] bg-[#f6f8fa] p-1" aria-label="Main navigation">
             <button onClick={() => setView("explore")} className={`rounded-md px-3 py-1.5 text-xs font-medium ${view !== "compare" ? "bg-white text-[#1f2328] shadow-sm" : "text-[#656d76] hover:text-[#1f2328]"}`}>Explore</button>
@@ -251,10 +251,10 @@ function App() {
               Compare <span className="rounded-full bg-[#eaeef2] px-1.5 py-0.5 font-mono text-[10px]">{selected.length}</span>
             </button>
           </nav>
-          <div className="hidden items-center gap-1.5 text-[11px] text-[#656d76] sm:flex">
+          {/* <div className="hidden items-center gap-1.5 text-[11px] text-[#656d76] sm:flex">
             <span className={`h-2 w-2 rounded-full ${apiStatus?.tokenConfigured ? "bg-[#1a7f37]" : "bg-[#bf8700]"}`} />
             {apiStatus?.tokenConfigured ? "Server token configured" : apiStatus ? "Public API · lower limit" : "Connecting"}
-          </div>
+          </div> */}
         </div>
       </header>
 
@@ -288,7 +288,7 @@ function App() {
             {view === "explore" && (
               <section className="space-y-4">
                 <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[#d0d7de] pb-3">
-                  <div><p className="text-[11px] font-medium uppercase tracking-[.08em] text-[#656d76]">{searched ? "Search results" : "Ready when you are"}</p><h2 className="mt-1 text-lg font-semibold">{searched ? `${totalCount.toLocaleString()} repositories found` : "Start with a search or a repository URL"}</h2></div>
+                  {/* <div><p className="text-[11px] font-medium uppercase tracking-[.08em] text-[#656d76]">{searched ? "Search results" : "Ready when you are"}</p><h2 className="mt-1 text-lg font-semibold">{searched ? `${totalCount.toLocaleString()} repositories found` : "Start with a search or a repository URL"}</h2></div> */}
                   <div className="flex items-center gap-2">
                     {selected.length > 0 && <button onClick={() => setView("compare")} className="inline-flex h-9 items-center gap-2 rounded-md border border-[#0969da] bg-[#ddf4ff] px-3 text-xs font-semibold text-[#0969da] hover:bg-[#b6e3ff]">Compare {selected.length} <ArrowRight size={14} /></button>}
                     {searched && <span className="text-[11px] text-[#8c959f]">Ranked by {sort === "best" ? "balanced signal" : sort === "stars" ? "stars" : "recent activity"}</span>}
@@ -407,7 +407,7 @@ function App() {
           </section>
         )}
       </main>
-      <footer className="border-t border-[#d0d7de] bg-white"><div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-2 px-5 py-4 text-[10px] text-[#8c959f] sm:px-8"><span>GitHub Signal · Built for better open-source decisions</span><span>GitHub REST API · Activity timestamps in UTC</span></div></footer>
+      <footer className="border-t border-[#d0d7de] bg-white"><div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-2 px-5 py-4 text-[10px] text-[#8c959f] sm:px-8"><span>GitHub Repository Dashboard  · Built for better open-source decisions</span><span>Development</span></div></footer>
     </div>
   );
 }
